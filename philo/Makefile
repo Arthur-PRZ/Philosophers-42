@@ -6,7 +6,7 @@
 #    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/15 09:23:30 by artperez          #+#    #+#              #
-#    Updated: 2025/05/15 09:27:50 by artperez         ###   ########.fr        #
+#    Updated: 2025/05/16 11:58:20 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,16 +26,14 @@ all: $(NAME)
 
 $(NAME): $(FO) $(LIBFT_PATH)
 	@echo "Compiling philo"
-	@$(CC) $(CFLAGS) $(FO) -o $(NAME)
+	@$(CC) $(CFLAGS) $(FO) -o $(NAME) -lpthread
 
 clean:
 	@rm -f $(FO)
-	@make clean -sC libft/
 	@echo "Clean .o"
 
 fclean: clean
 	@rm -rf $(NAME)
-	@make fclean -sC libft/
 	@echo "Clean .o and philo"
 
 re: fclean all

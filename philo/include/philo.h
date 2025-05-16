@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:55:46 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/15 13:05:53 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:49:13 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ typedef struct s_philo
     int time_to_eat;
     int time_to_sleep;
     int nbr_of_must_eat;
-    int philo_nbr;
-	pthread_t *thread;
+    int philo_id;
+	pthread_t thread;
     t_do    has;
 	pthread_mutex_t lock;
     struct s_fork   *right_fork;
@@ -54,5 +54,6 @@ int	ft_atoi(const char *str);
 void	init_threads(t_philo *philos, int philo_nbr);
 long long	get_time(struct timeval *time);
 void	*exec(void *data);
+void	exec_eat(t_philo *philo, struct timeval *time);
 
 #endif
