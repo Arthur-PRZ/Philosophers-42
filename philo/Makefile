@@ -6,7 +6,7 @@
 #    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/15 09:23:30 by artperez          #+#    #+#              #
-#    Updated: 2025/05/16 11:58:20 by artperez         ###   ########.fr        #
+#    Updated: 2025/05/19 13:42:30 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-FC = src/main.c src/ft_itoa.atoi.c \
+FC = src/main.c src/ft_itoa.atoi.c src/threads.c \
 
 FO = $(FC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:54:56 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/16 12:51:51 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:29:13 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,71 +41,20 @@ bool	check_input(char **inputs, int inputs_nbr)
 	return (true);
 }
 
-void	init_threads(t_philo *philos, int philo_nbr)
+long long	get_time(void)
 {
-	int	i;
-	
-	i = 0;
-	(void)philos;
-	while (i < philo_nbr)
-	{
-		pthread_create(&philos[i].thread, NULL, exec, &philos[i]);
-		i++;
-	}
+	struct timeval t;
+
+	gettimeofday(&t, NULL);
+	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
 
-// void	exec(t_philo *philo, struct timeval *time)
-// {
-// 	printf("%lld %i his thinking\n", get_time(time), philo->philo_nbr);
-// 	pthread_mutex_lock(&philo->left_fork->lock);
-// 	printf("%lld %i has taken a fork\n", get_time(time), philo->philo_nbr);
-// 	pthread_mutex_lock(&philo->right_fork->lock);
-// 	printf("%lld %i has taken a fork\n", get_time(time), philo->philo_nbr);
-// 	printf("%lld %i is eating\n", get_time(time), philo->philo_nbr);
-// 	usleep(philo->time_to_eat * 1000);
-// 	pthread_mutex_unlock(&philo->left_fork->lock);
-// 	pthread_mutex_unlock(&philo->right_fork->lock);
-// 	printf("%lld %i is sleeping\n", get_time(time), philo->philo_nbr);
-// 	usleep(philo->time_to_sleep * 1000);
-// }
-
-void *exec(void *data)
-{
-	t_philo *philo;
-	struct timeval	time;
-
-	philo = (t_philo*)data;
-	while (1)
-	{
-		pthread_mutex_lock(&philo->left_fork->lock);
-		printf("%lld %i has taken a fork\n", get_time(&time), philo->philo_id);
-		pthread_mutex_lock(&philo->right_fork->lock);
-		printf("%lld %i has taken a fork\n", get_time(&time), philo->philo_id);
-		printf("%lld %i is eating\n", get_time(&time), philo->philo_id);
-		usleep(philo->time_to_eat * 1000);
-		printf("%lld %i is thinking\n", get_time(&time), philo->philo_id);
-		philo->time_to_die = 0;
-		pthread_mutex_unlock(&philo->left_fork->lock);
-		pthread_mutex_unlock(&philo->right_fork->lock);
-		printf("%lld %i is sleeping\n", get_time(&time), philo->philo_id);
-		usleep(philo->time_to_sleep * 1000);
-	}
-	return (NULL);
-}
-
-long long	get_time(struct timeval *time)
-{
-	long long	res;
-
-	gettimeofday(time, NULL);
-	res = time->tv_sec * 1000 + time->tv_usec / 1000;
-	return (res);
-}
 
 t_philo	*init_philo(char **inputs)
 {
 	int	philo_nbr;
 	int	i;
+	bool	is_dead;
 	t_philo	*philos;
 	t_fork	*forks;
 
@@ -113,6 +62,7 @@ t_philo	*init_philo(char **inputs)
 	philo_nbr = ft_atoi(inputs[1]);
 	philos = malloc(sizeof(t_philo) * ft_atoi(inputs[1]));
 	forks = malloc(sizeof(t_philo) * ft_atoi(inputs[1]));
+	is_dead = false;
 	while (i < philo_nbr)
 	{
 		forks[i].fork_name = i + 1;
@@ -120,15 +70,17 @@ t_philo	*init_philo(char **inputs)
 		philos[i].time_to_die = ft_atoi(inputs[2]);
 		philos[i].time_to_eat = ft_atoi(inputs[3]);
 		philos[i].time_to_sleep = ft_atoi(inputs[4]);
+		philos[i].is_dead = false;
+		philos[i].philo_nbr = philo_nbr;
 		if (inputs[5])
 			philos[i].nbr_of_must_eat = ft_atoi(inputs[5]);
 		philos[i].left_fork = &forks[i];
-		if (i + 1 > philo_nbr)
+		if (i + 1 == philo_nbr)
 			philos[i].right_fork = &forks[0];
 		else
 			philos[i].right_fork = &forks[i + 1];
 		pthread_mutex_init(&forks[i].lock, NULL);
-		pthread_mutex_init(&philos[i].lock, NULL);
+		pthread_mutex_init(&philos[i].meal_lock, NULL);
 		i++;
 	}
 	return (philos);

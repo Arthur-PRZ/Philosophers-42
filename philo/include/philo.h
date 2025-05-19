@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:55:46 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/16 12:49:13 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:29:09 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,17 @@ typedef enum s_do
 
 typedef struct s_philo
 {
+	pthread_mutex_t meal_lock;
     int time_to_die;
     int time_to_eat;
     int time_to_sleep;
     int nbr_of_must_eat;
     int philo_id;
+    long long last_meal;
+    int philo_nbr;
+    bool    *is_dead;
 	pthread_t thread;
     t_do    has;
-	pthread_mutex_t lock;
     struct s_fork   *right_fork;
     struct s_fork   *left_fork;
 }   t_philo;
@@ -52,7 +55,7 @@ bool	check_input(char **inputs, int inputs_nbr);
 char	*ft_itoa(int n);
 int	ft_atoi(const char *str);
 void	init_threads(t_philo *philos, int philo_nbr);
-long long	get_time(struct timeval *time);
+long long	get_time(void);
 void	*exec(void *data);
 void	exec_eat(t_philo *philo, struct timeval *time);
 
