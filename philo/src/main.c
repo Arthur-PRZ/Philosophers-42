@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:54:56 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/21 13:10:57 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:32:11 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,26 @@ bool	check_input(char **inputs, int inputs_nbr)
 						41), (false));
 			j++;
 		}
-		if (ft_atoi(inputs[i]) < 0)
-			return (write(2, "Invalid Input : postive nbr required\n", 38),
+		if (ft_strcmp(inputs[i], ft_itoa(ft_atoi(inputs[i]))) != 0)
+			return (write(2, "Invalid Input : nbr must be storable in a int\n", 47),
+						(false));
+		if (ft_atoi(inputs[i]) <= 0)
+			return (write(2, "Invalid Input : nbr must be > 0\n", 33),
 				(false));
 		i++;
 		j = 0;
 	}
 	return (true);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 -*s2);
 }
 
 long long	get_time(void)
@@ -48,7 +61,6 @@ long long	get_time(void)
 	gettimeofday(&t, NULL);
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
-
 
 t_philo	*init_philo(char **inputs)
 {
@@ -98,6 +110,23 @@ t_philo	*init_philo(char **inputs)
 	return (philos);
 }
 
+void	free_all(t_philo *philos)
+{
+	int	i;
+	int	philo_nbr;
+
+	i = 0;
+	philo_nbr = philos[0].philo_nbr;
+	while(i < philo_nbr)
+	{
+		if (philos[i])
+		free(philos[i].right_fork);
+		philos[i].right_fork = NULL;
+		free(&philos[i]);
+		i++;		
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_philo *philos;
@@ -106,5 +135,6 @@ int	main(int argc, char **argv)
 		return (-1);
 	philos = init_philo(argv);
 	init_threads(philos, ft_atoi(argv[1]));
+	free_all(philos);
 	return (0);
 }

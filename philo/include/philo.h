@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:55:46 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/21 13:42:04 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:12:08 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <limits.h>
 
 typedef struct s_fork
 {
@@ -50,14 +51,13 @@ typedef struct s_philo
     bool    *is_dead;
 	pthread_t thread;
     t_do    has;
+    struct s_fork   *forks;
     struct s_fork   *right_fork;
     struct s_fork   *left_fork;
 }   t_philo;
 
-// static size_t	ft_intlen(int n);
 bool	check_input(char **inputs, int inputs_nbr);
 bool	check_end(t_philo *philo);
-// static char	*gogotransfo(char *str, long n, size_t len);
 char	*ft_itoa(int n);
 int	ft_atoi(const char *str);
 void	init_threads(t_philo *philos, int philo_nbr);
@@ -66,5 +66,7 @@ void	*exec(void *data);
 void	exec_eat(t_philo *philo, struct timeval *time);
 void	ft_printf(char *str, t_philo *philo);
 void *exec1(void *data);
+int	ft_strcmp(char *s1, char *s2);
+
 
 #endif

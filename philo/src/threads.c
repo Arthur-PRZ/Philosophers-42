@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:52:50 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/21 14:38:53 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/22 10:45:56 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void *check_philos(void *data)
             pthread_mutex_unlock(&philos[0].meal_finish_lock);
             return (NULL);
         }
-        usleep(1000);
+        usleep(5000);
     }
 }
 
@@ -121,27 +121,28 @@ bool	check_end(t_philo *philo)
 void *exec(void *data)
 {
 	t_philo *philo;
-	pthread_mutex_t *first_fork;
-    pthread_mutex_t *second_fork;
+	int		first_fork_id;
+	int		second_fork_id;
+	t_fork *first_fork;
+    t_fork *second_fork;
 
 	philo = (t_philo*)data;
-	if (philo->left_fork->fork_name < philo->right_fork->fork_name)
-	{
-		first_fork = &philo->left_fork->lock;
-		second_fork = &philo->right_fork->lock;
-	}
-	else
-	{
-		first_fork = &philo->right_fork->lock;
-		second_fork = &philo->left_fork->lock;
-	}
 	if (philo->philo_id % 2 == 0)
 		usleep(5000);
 	while (check_end(philo) == false && (philo->nbr_of_eat == -1 || philo->meal_eat < philo->nbr_of_eat))
 	{
-		pthread_mutex_lock(first_fork);
+		first_fork_id = philo->left_fork->fork_name;
+		second_fork_id = philo->right_fork->fork_name;
+		first_fork = philo->left_fork;
+		second_fork = philo->right_fork;
+		if (second_fork_id < first_fork_id)
+		{
+			first_fork = philo->right_fork;
+			second_fork = philo->left_fork;
+		}
+		pthread_mutex_lock(&first_fork->lock);
 		ft_printf("has taken a fork\n", philo);
-		pthread_mutex_lock(second_fork);
+		pthread_mutex_lock(&second_fork->lock);
 		ft_printf("has taken a fork\n", philo);
 		pthread_mutex_lock(&philo->meal_lock);
 		ft_printf("is eating\n", philo);
@@ -150,8 +151,8 @@ void *exec(void *data)
 		pthread_mutex_unlock(&philo->meal_lock);
 		usleep(philo->time_to_eat * 1000);
 		ft_printf("is thinking\n", philo);
-		pthread_mutex_unlock(second_fork);
-		pthread_mutex_unlock(first_fork);
+		pthread_mutex_unlock(&second_fork->lock);
+		pthread_mutex_unlock(&first_fork->lock);
 		ft_printf("is sleeping\n", philo);
 		usleep(philo->time_to_sleep * 1000);
 	}
