@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.atoi.c                                     :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 11:24:39 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/14 12:17:58 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:11:16 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,16 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (a * signe);
+}
+
+bool	check_end(t_philo *philo)
+{
+	pthread_mutex_lock(philo->is_dead_lock);
+	if (*philo->is_dead == false)
+	{
+		pthread_mutex_unlock(philo->is_dead_lock);
+		return (false);
+	}
+	pthread_mutex_unlock(philo->is_dead_lock);
+	return (true);
 }
