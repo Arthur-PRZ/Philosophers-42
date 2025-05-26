@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:27:06 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/23 12:15:16 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:00:43 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,9 @@ void	init_threads(t_philo *philos, int philo_nbr)
 	pthread_t	check_thread;
 
 	i = 0;
-	if (philos[0].right_fork == NULL)
+	philos[0].meal_eat = 0;
+	philos[0].last_meal = get_time();
+	if (philos[0].philo_nbr == 1)
 		pthread_create(&philos[0].thread, NULL, exec1, &philos[i]);
 	else
 	{
@@ -111,10 +113,7 @@ void	init_threads(t_philo *philos, int philo_nbr)
 	}
 	pthread_create(&check_thread, NULL, check_philos, philos);
 	pthread_join(check_thread, NULL);
-	i = 0;
-	while (i < philo_nbr)
-	{
+	i = -1;
+	while (++i < philo_nbr)
 		pthread_join(philos[i].thread, NULL);
-		i++;
-	}
 }

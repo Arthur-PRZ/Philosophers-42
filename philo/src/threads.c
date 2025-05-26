@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:52:50 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/26 09:24:43 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/26 09:36:58 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ bool	check_all_eat(t_philo *philo, int finished_philos)
 bool	check_death(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_lock);
+	if (philo->nbr_of_eat != -1 && philo->meal_eat >= philo->nbr_of_eat)
+	{
+		pthread_mutex_unlock(&philo->meal_lock);
+		return (true);
+	}
 	if (get_time() - philo->last_meal > philo->time_to_die)
 	{
 		pthread_mutex_lock(&philo->printf_lock);
@@ -96,8 +101,6 @@ void	*exec(void *data)
 	while (check_end(philo) == false && (philo->nbr_of_eat == -1
 			|| philo->meal_eat < philo->nbr_of_eat))
 	{
-        if (philo->nbr_of_eat != -1 && philo->meal_eat >= philo->nbr_of_eat)
-            break;
 		fork_handler(philo);
 		pthread_mutex_lock(&philo->meal_lock);
 		ft_printf("is eating\n", philo);
