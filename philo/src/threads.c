@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:52:50 by artperez          #+#    #+#             */
-/*   Updated: 2025/05/23 12:42:52 by artperez         ###   ########.fr       */
+/*   Updated: 2025/05/26 09:24:43 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ bool	check_all_eat(t_philo *philo, int finished_philos)
 	if (philo->nbr_of_eat != -1 && finished_philos
 		== philo->philo_nbr)
 	{
-		printf("\n%i\n\n", finished_philos);
 		pthread_mutex_lock(&philo->meal_finish_lock);
 		*philo->meal_finish = philo->philo_nbr;
 		pthread_mutex_unlock(&philo->meal_finish_lock);
@@ -97,6 +96,8 @@ void	*exec(void *data)
 	while (check_end(philo) == false && (philo->nbr_of_eat == -1
 			|| philo->meal_eat < philo->nbr_of_eat))
 	{
+        if (philo->nbr_of_eat != -1 && philo->meal_eat >= philo->nbr_of_eat)
+            break;
 		fork_handler(philo);
 		pthread_mutex_lock(&philo->meal_lock);
 		ft_printf("is eating\n", philo);
