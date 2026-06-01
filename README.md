@@ -4,13 +4,13 @@ A 42 project implementing the classic **Dining Philosophers Problem** using thre
 
 ---
 
-## 📖 Introduction
+## Introduction
 
 The **Dining Philosophers Problem** is a classic concurrency problem.
 
 A set of philosophers sit at a round table with a fork between each of them. To eat, a philosopher needs **two forks** — the one on their left and the one on their right. The challenge is to make every philosopher eat without any of them **starving** or causing a **deadlock**.
 
-### 💡 Key Concepts
+### Key Concepts
 
 - **Threads** — each philosopher runs as an independent thread
 - **Mutex** — forks are protected by mutexes to prevent data races
@@ -20,7 +20,7 @@ A set of philosophers sit at a round table with a fork between each of them. To 
 
 ---
 
-## ⚙️ Usage
+## Usage
 
 ### Compilation
 
@@ -62,7 +62,7 @@ make re     # Full recompilation
 
 ---
 
-## 📋 Log Format
+## Log Format
 
 Each event is displayed as follows:
 
@@ -76,6 +76,6 @@ timestamp_in_ms X died
 
 ---
 
-## 👤 Author
+## Author
 
 Made by [Arthur-PRZ](https://github.com/Arthur-PRZ)
