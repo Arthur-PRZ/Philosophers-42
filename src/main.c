@@ -29,7 +29,7 @@ bool	check_input(char **inputs, int inputs_nbr)
 		{
 			if (inputs[i][j] < '0' || inputs[i][j] > '9')
 				return (write(2, "Invalid Input : Numerics char required\n",
-						41), (false));
+						40), (false));
 			j++;
 		}
 		if (check_nbr(inputs[i]) == false)
